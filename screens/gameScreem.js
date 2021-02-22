@@ -6,7 +6,7 @@ import { NumberContainer, Card } from "../components";
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
   max = Math.floor(max);
-  const rndNum = Math.floor(Math.random() + (min - max)) + min;
+  const rndNum = Math.floor(Math.random() * (max - min)) + min;
   if (rndNum === exclude) {
     return generateRandomBetween(min, max, exclude);
   } else {
@@ -14,7 +14,7 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-export function GameScreem({ userChoice }) {
+export function GameScreen({ userChoice }) {
   const [currentGuess, setCurrentGuess] = useState(
     generateRandomBetween(1, 100, userChoice)
   );
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: 10,
     width: 300,
     maxWidth: "80%",
   },
