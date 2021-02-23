@@ -3,19 +3,38 @@ import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 import { Hedaer } from "./components";
-import { StartGameScreen, GameScreen } from "./screens";
+import { StartGameScreen, GameScreen, GameOver } from "./screens";
 import GlobalState from "./context/globalState";
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
+  const [guessRounds, setGuessRounds] = useState(0);
 
+  const newGameHandler = () => {
+    setGuessRounds(0);
+    setUserNumber(null);
+  };
   const startGameHandler = (selectedNumber) => {
     setUserNumber(selectedNumber);
+    setGuessRounds(0);
+  };
+  const gameOverHandler = (numOfRounds) => {
+    setGuessRounds(numOfRounds);
   };
 
-  let content = <StartGameScreen onStartGameHandler={startGameHandler} />;
-  if (userNumber) {
-    content = <GameScreen userChoice={userNumber} />;
+  let content = <StartGameScreen onStartGame={startGameHandler} />;
+  if (userNumber && guessRounds <= 0) {
+    content = (
+      <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
+    );
+  } else if (guessRounds > 0) {
+    content = (
+      <GameOver
+        roundsNumber={guessRounds}
+        userNumber={userNumber}
+        onNewGameHandler={newGameHandler}
+      />
+    );
   }
   return (
     <GlobalState>

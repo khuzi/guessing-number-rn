@@ -12,7 +12,7 @@ import {
 import { colors } from "../constants";
 import { Card, Input, NumberContainer } from "../components";
 
-export function StartGameScreen({ onStartGameHandler }) {
+export function StartGameScreen({ onStartGame }) {
   const { primary, accent } = colors;
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
@@ -52,7 +52,7 @@ export function StartGameScreen({ onStartGameHandler }) {
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button
           title="START GAME"
-          onPress={() => onStartGameHandler(selectedNumber)}
+          onPress={() => onStartGame(selectedNumber)}
         />
       </Card>
     );
