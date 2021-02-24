@@ -10,11 +10,11 @@ import {
 } from "react-native";
 
 import { colors } from "../constants";
-import { Card, Input, NumberContainer } from "../components";
+import { Card, Input, NumberContainer, MainButton } from "../components";
 import { SET_USER_NUMBER, SET_START_GAME } from "../context/actions";
 import context from "../context/context";
 
-export function StartGameScreen({ onStartGame }) {
+export function StartGameScreen() {
   const { primary, accent } = colors;
 
   const { state, dispatch } = useContext(context);
@@ -53,8 +53,8 @@ export function StartGameScreen({ onStartGame }) {
       <Card style={styles.summaryContainer}>
         <Text>You Selected</Text>
         <NumberContainer>{state.userNumber}</NumberContainer>
-        <Button
-          title="START GAME"
+        <MainButton
+          txt="START GAME"
           onPress={() => dispatch({ type: SET_START_GAME })}
         />
       </Card>

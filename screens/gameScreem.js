@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import { NumberContainer, Card } from "../components";
+import { NumberContainer, Card, MainButton } from "../components";
 import { INCREASE_ROUNDS } from "../context/actions";
 import context from "../context/context";
 
@@ -59,9 +60,12 @@ export function GameScreen() {
       <Text>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title="LOWER" onPress={nextGuessHandler.bind(this, "lower")} />
-        <Button
-          title="GREATER"
+        <MainButton
+          txt={<Ionicons name="md-remove" size={24} color="white" />}
+          onPress={nextGuessHandler.bind(this, "lower")}
+        />
+        <MainButton
+          txt={<Ionicons name="md-add" size={24} color="white" />}
           onPress={nextGuessHandler.bind(this, "greater")}
         />
       </Card>
@@ -79,7 +83,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 10,
-    width: 300,
-    maxWidth: "80%",
+    width: 400,
+    maxWidth: "90%",
   },
 });

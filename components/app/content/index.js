@@ -9,7 +9,7 @@ export function Content() {
   const { state } = useContext(context);
 
   let content = <StartGameScreen />;
-  if (state.userNumber && state.rounds <= 0) {
+  if (state.userNumber && state.rounds <= 0 && state.startGame) {
     content = <GameScreen />;
   } else if (state.rounds > 0) {
     content = <GameOver />;

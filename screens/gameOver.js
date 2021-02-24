@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, Button, Image } from "react-native";
 
+import { MainButton } from "../components";
 import { NEW_GAME } from "../context/actions";
 import context from "../context/context";
 import { globalStyles } from "../constants";
@@ -22,7 +23,10 @@ export function GameOver() {
       <Text style={bodyText}>Number of rounds: {state.rounds}</Text>
       <Text style={bodyText}>Number was: {state.userNumber}</Text>
       <View style={styles.btnContainer}>
-        <Button title="NEW GAME" onPress={() => dispatch({ type: NEW_GAME })} />
+        <MainButton
+          txt="NEW GAME"
+          onPress={() => dispatch({ type: NEW_GAME })}
+        />
       </View>
     </View>
   );
