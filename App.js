@@ -1,54 +1,35 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import AppLoading from "expo-app-loading";
 import { StatusBar } from "expo-status-bar";
+import * as Font from "expo-font";
 
-import { Hedaer } from "./components";
-import { StartGameScreen, GameScreen, GameOver } from "./screens";
+import { Content } from "./components";
 import GlobalState from "./context/globalState";
 
+const fetchFonts = () => {
+  return Font.loadAsync({
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+};
+
 export default function App() {
-  const [userNumber, setUserNumber] = useState();
-  const [guessRounds, setGuessRounds] = useState(0);
+  const [dataLoading, setDataLoading] = useState(false);
 
-  const newGameHandler = () => {
-    setGuessRounds(0);
-    setUserNumber(null);
-  };
-  const startGameHandler = (selectedNumber) => {
-    setUserNumber(selectedNumber);
-    setGuessRounds(0);
-  };
-  const gameOverHandler = (numOfRounds) => {
-    setGuessRounds(numOfRounds);
-  };
-
-  let content = <StartGameScreen onStartGame={startGameHandler} />;
-  if (userNumber && guessRounds <= 0) {
-    content = (
-      <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
-    );
-  } else if (guessRounds > 0) {
-    content = (
-      <GameOver
-        roundsNumber={guessRounds}
-        userNumber={userNumber}
-        onNewGameHandler={newGameHandler}
+  if (!dataLoading) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setDataLoading(true)}
+        onError={(err) => console.log(err)}
       />
     );
   }
+
   return (
     <GlobalState>
-      <View style={styles.screen}>
-        <Hedaer title="Guess a Number" />
-        {content}
-        <StatusBar style="auto" />
-      </View>
+      <Content />
+      <StatusBar style="auto" />
     </GlobalState>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
-});

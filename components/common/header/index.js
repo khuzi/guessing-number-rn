@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
   },
   hedaerTitle: {
     color: "#000",
-    fontSize: 18,
+    fontSize: 28,
+    fontFamily: "open-sans-bold",
+    letterSpacing: -1,
+    paddingTop: 3,
   },
 });

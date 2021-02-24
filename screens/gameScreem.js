@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, Button, Alert } from "react-native";
 
 import { NumberContainer, Card } from "../components";
+import { INCREASE_ROUNDS } from "../context/actions";
+import context from "../context/context";
 
 const generateRandomBetween = (min, max, exclude) => {
   min = Math.ceil(min);
@@ -14,23 +16,24 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
-export function GameScreen({ userChoice, onGameOver }) {
+export function GameScreen() {
+  const { state, dispatch } = useContext(context);
   const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, userChoice)
+    generateRandomBetween(1, 100, state.userNumber)
   );
   const [rounds, setRounds] = useState(0);
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
   useEffect(() => {
-    if (currentGuess === userChoice) {
-      onGameOver(rounds);
+    if (currentGuess === state.userNumber) {
+      dispatch({ type: INCREASE_ROUNDS, payload: rounds });
     }
-  }, [currentGuess, userChoice, onGameOver]);
+  }, [currentGuess]);
 
   const nextGuessHandler = (direction) => {
     if (
-      (direction === "lower" && currentGuess < userChoice) ||
-      (direction === "greater" && currentGuess > userChoice)
+      (direction === "lower" && currentGuess < state.userNumber) ||
+      (direction === "greater" && currentGuess > state.userNumber)
     ) {
       Alert.alert("Don't lie!", "You know that this wrong...!", [
         { text: "Sorry", style: "cancel" },

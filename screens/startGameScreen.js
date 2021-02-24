@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
 
 import { colors } from "../constants";
 import { Card, Input, NumberContainer } from "../components";
+import { SET_USER_NUMBER, SET_START_GAME } from "../context/actions";
+import context from "../context/context";
 
 export function StartGameScreen({ onStartGame }) {
   const { primary, accent } = colors;
+
+  const { state, dispatch } = useContext(context);
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
-  const [selectedNumber, setSelectedNumber] = useState();
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
@@ -39,7 +42,7 @@ export function StartGameScreen({ onStartGame }) {
       return;
     }
     setConfirmed(true);
-    setSelectedNumber(chooseNumber);
+    dispatch({ type: SET_USER_NUMBER, payload: chooseNumber });
     setEnteredValue("");
     Keyboard.dismiss();
   };
@@ -49,10 +52,10 @@ export function StartGameScreen({ onStartGame }) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
         <Text>You Selected</Text>
-        <NumberContainer>{selectedNumber}</NumberContainer>
+        <NumberContainer>{state.userNumber}</NumberContainer>
         <Button
           title="START GAME"
-          onPress={() => onStartGame(selectedNumber)}
+          onPress={() => dispatch({ type: SET_START_GAME })}
         />
       </Card>
     );
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginVertical: 10,
+    fontFamily: "open-sans-bold",
   },
   inputContainer: {
     width: 300,

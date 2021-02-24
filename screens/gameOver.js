@@ -1,13 +1,29 @@
-import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, StyleSheet, Button, Image } from "react-native";
 
-export function GameOver({ roundsNumber, userNumber, onNewGameHandler }) {
+import { NEW_GAME } from "../context/actions";
+import context from "../context/context";
+import { globalStyles } from "../constants";
+
+const { bodyText, titleText } = globalStyles;
+
+export function GameOver() {
+  const { state, dispatch } = useContext(context);
   return (
     <View style={styles.screen}>
-      <Text>The Game is over...!</Text>
-      <Text>Number of rounds: {roundsNumber}</Text>
-      <Text>Number was: {userNumber}</Text>
-      <Button title="NEW GAME" onPress={onNewGameHandler} />
+      <Text style={titleText}>The Game is over...!</Text>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/images/success.png.png")}
+          style={styles.image}
+        />
+      </View>
+
+      <Text style={bodyText}>Number of rounds: {state.rounds}</Text>
+      <Text style={bodyText}>Number was: {state.userNumber}</Text>
+      <View style={styles.btnContainer}>
+        <Button title="NEW GAME" onPress={() => dispatch({ type: NEW_GAME })} />
+      </View>
     </View>
   );
 }
@@ -17,5 +33,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  imageContainer: {
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    borderWidth: 2,
+    borderColor: "black",
+    overflow: "hidden",
+    marginVertical: 20,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  btnContainer: {
+    marginTop: 10,
   },
 });
