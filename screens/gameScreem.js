@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { NumberContainer, Card, MainButton } from "../components";
-import { INCREASE_ROUNDS } from "../context/actions";
+import { INCREASE_ROUNDS, ADD_GUESS } from "../context/actions";
 import context from "../context/context";
 
 const generateRandomBetween = (min, max, exclude) => {
@@ -19,17 +19,20 @@ const generateRandomBetween = (min, max, exclude) => {
 
 export function GameScreen() {
   const { state, dispatch } = useContext(context);
-  const [currentGuess, setCurrentGuess] = useState(
-    generateRandomBetween(1, 100, state.userNumber)
-  );
-  const [rounds, setRounds] = useState(0);
+  const initialGuess = generateRandomBetween(1, 100, state.userNumber);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
+
   useEffect(() => {
     if (currentGuess === state.userNumber) {
-      dispatch({ type: INCREASE_ROUNDS, payload: rounds });
+      dispatch({ type: INCREASE_ROUNDS, payload: state.allGuesses.length });
     }
   }, [currentGuess]);
+
+  useEffect(() => {
+    dispatch({ type: ADD_GUESS, payload: currentGuess });
+  }, []);
 
   const nextGuessHandler = (direction) => {
     if (
@@ -52,7 +55,7 @@ export function GameScreen() {
       currentGuess
     );
     setCurrentGuess(nextNumber);
-    setRounds((currRounds) => currRounds + 1);
+    dispatch({ type: ADD_GUESS, payload: nextNumber });
   };
 
   return (
@@ -69,6 +72,16 @@ export function GameScreen() {
           onPress={nextGuessHandler.bind(this, "greater")}
         />
       </Card>
+      <View style={styles.listContainer}>
+        <ScrollView contentContainerStyle={styles.list}>
+          {state.allGuesses.map((guess, i) => (
+            <View style={styles.listItem} key={i}>
+              <Text>#{state.allGuesses.length - i}</Text>
+              <Text>{guess}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -85,5 +98,24 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 400,
     maxWidth: "90%",
+  },
+  listContainer: {
+    flex: 1,
+    width: "80%",
+  },
+  list: {
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  listItem: {
+    flexDirection: "row",
+    borderColor: "black",
+    padding: 15,
+    marginVertical: 10,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    justifyContent: "space-between",
+    width: "60%",
   },
 });
