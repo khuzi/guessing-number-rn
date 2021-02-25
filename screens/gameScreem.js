@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { NumberContainer, Card, MainButton } from "../components";
@@ -16,6 +23,13 @@ const generateRandomBetween = (min, max, exclude) => {
     return rndNum;
   }
 };
+
+const listItem = (listLength, itemData) => (
+  <View style={styles.listItem}>
+    <Text>#{listLength - itemData.index}</Text>
+    <Text>{itemData.item}</Text>
+  </View>
+);
 
 export function GameScreen() {
   const { state, dispatch } = useContext(context);
@@ -73,14 +87,17 @@ export function GameScreen() {
         />
       </Card>
       <View style={styles.listContainer}>
-        <ScrollView contentContainerStyle={styles.list}>
-          {state.allGuesses.map((guess, i) => (
-            <View style={styles.listItem} key={i}>
-              <Text>#{state.allGuesses.length - i}</Text>
-              <Text>{guess}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        {/* <ScrollView contentContainerStyle={styles.list}>
+          {state.allGuesses.map((guess, i) =>
+            listItem(guess, state.allGuesses.length - i)
+          )}
+        </ScrollView> */}
+        <FlatList
+          keyExtractor={(item) => item}
+          data={state.allGuesses}
+          renderItem={listItem.bind(this, state.allGuesses.length)}
+          contentContainerStyle={styles.list}
+        />
       </View>
     </View>
   );
@@ -101,11 +118,10 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    width: "80%",
+    width: "60%",
   },
   list: {
     flexGrow: 1,
-    alignItems: "center",
     justifyContent: "flex-end",
   },
   listItem: {
@@ -116,6 +132,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderWidth: 1,
     justifyContent: "space-between",
-    width: "60%",
+    width: "100%",
   },
 });

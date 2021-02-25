@@ -7,9 +7,8 @@ import {
 } from "./actions";
 
 const addGuess = (guess, state) => {
-  const updatedGuess = [...state.allGuesses];
-  updatedGuess.push(guess);
-  return { ...state, allGuesses: updatedGuess.reverse() };
+  const updatedGuess = [guess.toString(), ...state.allGuesses];
+  return { ...state, allGuesses: updatedGuess };
 };
 
 export const reducer = (state, action) => {
