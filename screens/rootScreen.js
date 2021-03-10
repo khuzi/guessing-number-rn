@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 
-import { StartGameScreen, GameScreen, GameOver } from "../../../screens";
-import { Hedaer } from "../../common";
-import context from "../../../context/context";
+import { StartGameScreen } from "./startGameScreen";
+import { GameOver } from "./gameOver";
+import { GameScreen } from "./gameScreem";
+import { Hedaer } from "../components";
+import context from "../context/context";
 
-export function Content() {
+export function RootScreen() {
   const { state } = useContext(context);
 
   let content = <StartGameScreen />;

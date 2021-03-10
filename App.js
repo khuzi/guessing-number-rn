@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Image } from "react-native";
 import AppLoading from "expo-app-loading";
 import { StatusBar } from "expo-status-bar";
 import * as Font from "expo-font";
 
-import { Content } from "./components";
+import { RootScreen } from "./screens/rootScreen";
 import GlobalState from "./context/globalState";
 
 const fetchFonts = () => {
@@ -29,7 +28,7 @@ export default function App() {
 
   return (
     <GlobalState>
-      <Content />
+      <RootScreen />
       <StatusBar style="auto" />
     </GlobalState>
   );
