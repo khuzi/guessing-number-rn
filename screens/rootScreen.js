@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, SafeAreaView } from "react-native";
 
 import { StartGameScreen } from "./startGameScreen";
 import { GameOver } from "./gameOver";
@@ -17,10 +17,10 @@ export function RootScreen() {
     content = <GameOver />;
   }
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <Hedaer title="Guess a Number" />
       {content}
-    </View>
+    </SafeAreaView>
   );
 }
 

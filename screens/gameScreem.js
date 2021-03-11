@@ -4,8 +4,8 @@ import {
   Text,
   StyleSheet,
   Alert,
-  ScrollView,
   FlatList,
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -35,6 +35,9 @@ export function GameScreen() {
   const { state, dispatch } = useContext(context);
   const initialGuess = generateRandomBetween(1, 100, state.userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [deviceHeight, setDeviceHeight] = useState(
+    Dimensions.get("window").height
+  );
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
@@ -47,6 +50,16 @@ export function GameScreen() {
   useEffect(() => {
     dispatch({ type: ADD_GUESS, payload: currentGuess });
   }, []);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setDeviceHeight(Dimensions.get("window").height);
+    };
+    Dimensions.addEventListener("change", updateLayout);
+    return () => {
+      Dimensions.removeEventListener("change", updateLayout);
+    };
+  });
 
   const nextGuessHandler = (direction) => {
     if (
@@ -71,6 +84,33 @@ export function GameScreen() {
     setCurrentGuess(nextNumber);
     dispatch({ type: ADD_GUESS, payload: nextNumber });
   };
+
+  if (deviceHeight < 500) {
+    return (
+      <View style={styles.screen}>
+        <Text>Opponent's Guess</Text>
+        <View style={styles.controls}>
+          <MainButton
+            txt={<Ionicons name="md-remove" size={24} color="white" />}
+            onPress={nextGuessHandler.bind(this, "lower")}
+          />
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <MainButton
+            txt={<Ionicons name="md-add" size={24} color="white" />}
+            onPress={nextGuessHandler.bind(this, "greater")}
+          />
+        </View>
+        <View style={styles.listContainer}>
+          <FlatList
+            keyExtractor={(item) => item}
+            data={state.allGuesses}
+            renderItem={listItem.bind(this, state.allGuesses.length)}
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>
@@ -112,7 +152,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 10,
+    marginTop: Dimensions.get("window").height > 600 ? 10 : 20,
     width: 400,
     maxWidth: "90%",
   },
@@ -133,5 +173,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "space-between",
     width: "100%",
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
   },
 });
